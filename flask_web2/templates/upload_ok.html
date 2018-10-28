@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask上传图片演示upload_ok</title>
+</head>
+<br>
+    <h1>上传需要进行分割的图片</h1>
+    <form action="upload" enctype="multipart/form-data" method="POST">
+        <input type="file" name="file" style="margin-top:20px;"/>
+        <br>
+
+        <input type="submit" value="上传" class="button_new" style="margin-top:30px;"/>
+    </form>
+
+    <h1>分割后的结果图：</h1>
+         <img src="{{url_for('static', filename='./photo/test.jpg')}}" width="400" height="400" alt="你的图片被外星人劫持~~"/>
+
+    <br>
+    <br>
+    <form method="post" action="choose">
+        <input type="radio" name="segment_way" value="auto" checked="checked">自动分割
+        <input type="radio" name="segment_way" value="manual">手动分割
+        <input type="submit" onclick="alert('成功')" value="确定" style="margin-top:30px;"/>
+    </form>
+</body>
+</html>
