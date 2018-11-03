@@ -4,19 +4,20 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 from werkzeug.utils import secure_filename
 import os
 import cv2
-from datetime import timedelta
+import datetime
+#from datetime import timedelta
 from flask_bootstrap import Bootstrap
+from medical_image import medical_image
 
 # 设置允许的文件格式
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg'])
-
 
 def allowed_file(filename):
     return ',' in filename and filename.rsplit(',', 1)[1] in ALLOWED_EXTENSIONS
 app = Flask(__name__)
 bootstrap=Bootstrap(app)
 # 设置静态文件缓存的过期时间
-app.send_file_max_age_default = timedelta(seconds=1)
+app.send_file_max_age_default = datetime.timedelta(seconds=1)
 
 basepath = os.path.dirname(__file__)
 @app.route('/upload', methods=['POST', 'GET'])   # 添加路由
@@ -26,6 +27,18 @@ def upload():
         path = basepath + "/static/photos/"
         file_path = path + f.filename  # 图片路径和名称
         print(file_path)
+        
+        print('uploading')
+        user_temp = 'Ray'
+        type_temp = 'fat'
+        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        image_write = medical_image(user_temp,nowTime,type_temp,file_path)
+        image_write.connect_to_database()
+        image_write.insert()
+        image_write.commit_database()
+        image_write.disconnect_database()
+        print('uploaded')
+        
         f.save(file_path)  # 保存图片
 
         # 到本地文件读取图片并且显示在网页上
@@ -71,5 +84,5 @@ def download(filename):
 
 
 if __name__ =='__main__':
-    app.run(debug=True)
+    app.run(debug=False)
 
