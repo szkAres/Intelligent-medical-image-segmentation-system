@@ -5,28 +5,25 @@ from werkzeug.utils import secure_filename
 import os
 import cv2
 from datetime import timedelta
+from flask_bootstrap import Bootstrap
 
 # 设置允许的文件格式
-
-
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg'])
 
 
 def allowed_file(filename):
     return ',' in filename and filename.rsplit(',', 1)[1] in ALLOWED_EXTENSIONS
-
-
 app = Flask(__name__)
+bootstrap=Bootstrap(app)
 # 设置静态文件缓存的过期时间
 app.send_file_max_age_default = timedelta(seconds=1)
 
-
+basepath = os.path.dirname(__file__)
 @app.route('/upload', methods=['POST', 'GET'])   # 添加路由
 def upload():
     if request.method == 'POST':
         f = request.files['file']
-        basepath = os.path.dirname(__file__)
-        path = basepath + "/static/photo/"
+        path = basepath + "/static/photos/"
         file_path = path + f.filename  # 图片路径和名称
         print(file_path)
         f.save(file_path)  # 保存图片
@@ -53,7 +50,6 @@ def choosemmmm():
 
     # return render_template('upload_ok.html')      ## 可有可无？？？
 
-
 @app.route('/auto_segment')
 def auto_segment():
     return render_template('auto_segment.html')
@@ -62,6 +58,16 @@ def auto_segment():
 @app.route('/manual_segment')
 def manual_segment():
     return render_template('manual_segment.html')
+
+
+# 自动分割里的图片下载, 网址需要加上文件名
+
+# 如何根据显示的照片进行下载？？？？？？？？？？？？？？？？？？？将显示的照片赋值给filename???
+@app.route('/download/<filename>', methods=['get'])
+def download(filename):
+    if request.method=="GET":
+        if os.path.isfile(os.path.join('upload', filename)):
+            return send_from_directory('upload', filename, as_attachment=True)
 
 
 if __name__ =='__main__':
