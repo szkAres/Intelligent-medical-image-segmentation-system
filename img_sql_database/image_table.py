@@ -6,8 +6,8 @@ class image_table():
         self.database = Database
         self.table = Table
         
-    def connect_to_database(self):
-        self.db = MySQLdb.connect("localhost", "root", "temppwd", self.database)
+    def connect_to_database(self,host,username,password):
+        self.db = MySQLdb.connect(host, username, password, self.database)
         self.cursor = self.db.cursor()
         print('database '+self.database+' connected')
         
@@ -29,7 +29,7 @@ class image_table():
                 result_time = row[2]
                 result_type = row[3]
                 result_path = row[4]
-                print(str(result_id)+result_user+result_time+result_type+result_path)
+                print(str(result_id)+' '+result_user+' '+result_time+' '+result_type+' '+result_path)
                 
     def check_by_user(self,user_name,print_out):
         sql_command = "SELECT * FROM " + self.table + " WHERE User = '" + user_name + "'"
@@ -44,4 +44,19 @@ class image_table():
                 result_time = row[2]
                 result_type = row[3]
                 result_path = row[4]
-                print(str(result_id)+result_user+result_time+result_type+result_path)
+                print(str(result_id)+' '+result_user+' '+result_time+' '+result_type+' '+result_path)
+                
+    def check_all(self,print_out):
+        sql_command = "SELECT * FROM " + self.table
+        print(sql_command)
+        self.cursor.execute(sql_command)
+        self.results = self.cursor.fetchall()
+        print('select done')
+        if(print_out == True):
+            for row in self.results:
+                result_id = row[0]
+                result_user = row[1]
+                result_time = row[2]
+                result_type = row[3]
+                result_path = row[4]
+                print(str(result_id)+' '+result_user+' '+result_time+' '+result_type+' '+result_path)
