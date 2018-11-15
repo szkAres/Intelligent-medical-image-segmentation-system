@@ -5,12 +5,12 @@ from werkzeug.utils import secure_filename
 import os
 import cv2
 import datetime
-#from datetime import timedelta
 from flask_bootstrap import Bootstrap
 from medical_image import medical_image
 
 # 设置允许的文件格式
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg'])
+
 
 def allowed_file(filename):
     return ',' in filename and filename.rsplit(',', 1)[1] in ALLOWED_EXTENSIONS
@@ -18,6 +18,14 @@ app = Flask(__name__)
 bootstrap=Bootstrap(app)
 # 设置静态文件缓存的过期时间
 app.send_file_max_age_default = datetime.timedelta(seconds=1)
+
+host = "localhost"
+username = "root"
+password = "temppwd"
+database_name = "flask_sql"
+table_name = "ImagesDatabase"
+user_temp = 'Ray'
+type_temp = 'fat'
 
 basepath = os.path.dirname(__file__)
 @app.route('/upload', methods=['POST', 'GET'])   # 添加路由
@@ -29,12 +37,10 @@ def upload():
         print(file_path)
         
         print('uploading')
-        user_temp = 'Ray'
-        type_temp = 'fat'
         nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         image_write = medical_image(user_temp,nowTime,type_temp,file_path)
-        image_write.connect_to_database()
-        image_write.insert()
+        image_write.connect_to_database(host,username,password,database_name)
+        image_write.insert(table_name)
         image_write.commit_database()
         image_write.disconnect_database()
         print('uploaded')
@@ -71,6 +77,15 @@ def auto_segment():
 @app.route('/manual_segment')
 def manual_segment():
     return render_template('manual_segment.html')
+
+@app.route('/choose2', methods=['get', 'post'])
+def choosemmmm2():
+    flag1 = request.values.get('whether_basic_operation')
+    if flag1 == 'Yes':
+        return render_template('manual_basic_operation.html')
+    if flag1 == 'No':
+        return render_template('manual_segment.html')
+
 
 
 # 自动分割里的图片下载, 网址需要加上文件名

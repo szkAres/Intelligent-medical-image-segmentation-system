@@ -9,8 +9,8 @@ class medical_image():
         self.Path = Path
         self.Image = Image
         
-    def connect_to_database(self):
-        self.db = MySQLdb.connect("localhost", "root", "temppwd", "first_flask")
+    def connect_to_database(self,host,username,password,database_name):
+        self.db = MySQLdb.connect(host, username, password, database_name)
         self.cursor = self.db.cursor()
         print('database connected')
         
@@ -28,14 +28,14 @@ class medical_image():
         data = self.cursor.fetchone()
         print ("Database version : %s " % data)
         
-    def insert(self):
-        sql_command = "INSERT INTO ImagesDatabase(User,Time,Type,Path) VALUES('"+self.User+"','"+self.Time+"','"+self.Type+"','"+self.Path+"')"
+    def insert(self,table_name):
+        sql_command = "INSERT INTO " + table_name + "(User,Time,Type,Path) VALUES('"+self.User+"','"+self.Time+"','"+self.Type+"','"+self.Path+"')"
         print(sql_command)
         self.cursor.execute(sql_command)
         print('insert done')
         
-    def select(self):
-        self.cursor.execute("SELECT * FROM ImagesDatabase")
+    def select(self,table_name):
+        self.cursor.execute("SELECT * FROM " + table_name)
         print('select done')
         
     def read(self):
@@ -46,8 +46,14 @@ class medical_image():
         self.Path = self.data_fetched[4]
         print('read done '+ self.User + ' '+ self.Time + ' ' + self.Type + ' ' + self.Path)
         
-    def select_by_type(self,type_name):
-        sql_command = "SELECT * FROM ImagesDatabase WHERE Type = '" + type_name + "'"
+    def select_by_type(self,type_name,table_name):
+        sql_command = "SELECT * FROM " + table_name + " WHERE Type = '" + type_name + "'"
         print(sql_command)
         self.cursor.execute(sql_command)
         print('select ' + type_name + ' done')
+        
+    def select_by_user(self,user_name,table_name):
+        sql_command = "SELECT * FROM " + table_name + " WHERE User = '" + user_name + "'"
+        print(sql_command)
+        self.cursor.execute(sql_command)
+        print('select ' + user_name + ' done')

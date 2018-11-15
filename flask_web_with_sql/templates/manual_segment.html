@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <title>手动分割</title>
 </head>
-<body>
+<body background="/static/picture/background.jpg">
 <h1>手动</h1>
+
+<div class="main">
+    <h2 style="text-align:center">请问需要对图像进行一些基本操作吗？</h2>
+    <form style="text-align:center" role="form" method="post" action="choose2">
+        <label class="radio-inline">
+            <input type="radio" name="whether_basic_operation" value="Yes" checked="checked">需要
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="whether_basic_operation" value="No">不需要
+        </label>
+         <div class="form-group">
+            <input type="submit" class="btn btn-default" onclick="alert('成功')" value="确定" />
+        </div>
+    </form>
+
+</div>
 </body>
 </html>
