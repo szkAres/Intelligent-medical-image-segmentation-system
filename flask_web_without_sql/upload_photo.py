@@ -78,6 +78,7 @@ def show_photo(filename):
         pass
 
 
+
 @app.route('/auto_segment')
 def auto_segment():
     return render_template('auto_segment.html')
@@ -86,6 +87,14 @@ def auto_segment():
 @app.route('/manual_segment')
 def manual_segment():
     return render_template('manual_segment.html')
+
+@app.route('/choose3', methods=['get','post'])
+def manual_basic_operation():
+    return render_template('manual_direct_operation.html')
+
+#@app.route('/choose2', methods=['get','post'])
+#def manual_basic_operation():
+ #   return render_template('manual_direct_operation.html')
 
 
 if __name__ =='__main__':

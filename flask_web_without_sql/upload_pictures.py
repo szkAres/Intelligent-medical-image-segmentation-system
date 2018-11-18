@@ -54,6 +54,16 @@ def choosemmmm():
 def auto_segment():
     return render_template('auto_segment.html')
 
+@app.route('/choose3', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def choosemmmm3():
+    flag2 = request.values.get('segment_type')
+    if flag2 == 'AAT':
+        return render_template('auto_result.html')
+    if flag2 =='Brain segmentation':
+        return render_template('auto_result.html')
+    if flag2 =='Right ventricle segmentation':
+        return render_template('auto_result.html')
+
 
 @app.route('/manual_segment')
 def manual_segment():
@@ -65,7 +75,7 @@ def choosemmmm2():
     if flag1 == 'Yes':
         return render_template('manual_basic_operation.html')
     if flag1 == 'No':
-        return render_template('manual_segment.html')
+        return render_template('manual_direct_operation.html')
 
 
 
