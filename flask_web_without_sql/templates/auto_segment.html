@@ -1,37 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block page_content %}
 <head>
-    <meta charset="UTF-8">
-    <title>自动分割</title>
-</head>
-
-<body background="/static/picture/background.jpg">
-    <h1 style="text-align:center">自动分割</h1>
-
-    <div class="main">
-    <h2 style="text-align:center">选择分割的类型</h2>
-    <form style="text-align:center" role="form" method="post" action="choose3">
-        <label class="radio-inline">
-            <input type="radio" name="segment_type" value="AAT" checked="checked">腹部脂肪分割
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="segment_type" value="Brain segmentation">颅脑分割
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="segment_type" value="Right ventricle segmentation">右心室分割
-        </label>
-        <br><br>
-        <div class="form-group">
-            <input type="submit" class="btn btn-default" onclick="alert('成功')" value="开始自动分割" />
-        </div>
+    <style>
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
+    </style>
+<div class="page-header">
+    <h1 style="text-align:center">上传需要进行分割的图片</h1>
+</div>
+<body background="/static/background/background.jpg">
+<div class="main">
+    <form role="form" action="auto_segment" enctype='multipart/form-data' method='POST'>
+    <div class="form-group">
+        <input type="file" name="file", style="margin-top:20px;"/>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="上传" class="btn btn-default" />
+    </div>
     </form>
-    <h3 style="text-align:center">原图显示</h3>
-    <p style="text-alignn:crnter">
-    <img src="{{url_for('static', filename='./photos/test.jpg')}}" class="img-thumbnail" style="float:middle" width="400" height="400" alt="你的图片被外星人劫持~~"  />
-    </p>
 </div>
 
-</body>
-
-
-</html>
+{% endblock %}

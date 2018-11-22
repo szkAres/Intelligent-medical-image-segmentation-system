@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+      html, body {
+            height: 100%;
+        }
+
+        .box {
+            background: url(../img/login.jpg) no-repeat center center;
+            background-size: cover;
+
+            margin: 0 auto;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            position: absolute;
+            top: 50%;
+
+            margin-top: -200px;
+            /*设置负值，为要定位子盒子的一半高度*/
+
+        }
+
+        @media screen and (min-width: 500px) {
+            .login-box {
+                left: 50%;
+                /*设置负值，为要定位子盒子的一半宽度*/
+                margin-left: -250px;
+            }
+        }
+
+        .form {
+            width: 100%;
+            max-width: 500px;
+            height: 250px;
+            margin: 2px auto 0px auto;
+        }
+
+        .login-content {
+            /* background:url("../image/03.png") no-repeat center center; */
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            height: 250px;
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 250, 2550, .6);
+            float: left;
+        }
+
+        .input-group {
+            margin: 30px 0px 0px 0px !important;
+        }
+
+        .form-control,
+        .input-group {
+            height: 40px;
+        }
+
+        .form-actions {
+            margin-top: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 0px !important;
+        }
+        .radio-group{
+            margin-top:10px;
+            margin-left:45px;
+        }
+        .login-title {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            padding: 20px 10px;
+            background-color: rgba(0, 0, 0, .6);
+        }
+
+        .login-title h1 {
+            margin-top: 10px !important;
+        }
+
+        .login-title small {
+            color: #fff;
+        }
+
+        .link p {
+            line-height: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-sm {
+            padding: 8px 24px !important;
+            font-size: 16px !important;
+        }
+
+        .flag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-weight: bold;
+            font: 14px/normal "microsoft yahei", "Times New Roman", "宋体", Times, serif;
+        }
+        #login,#reset{
+            margin-left:10px;
+            margin-right:10px;
+        }
+      </style>
+
+
+</head>
+
+    <div class="box">
+        <div class="login-box">
+            <div class="login-title text-center">
+                <h1>
+                    <small>暑期实习管理系统</small>
+                </h1>
+            </div>
+            <div class="login-content ">
+                <div class="form">
+                    <form id="modifyPassword" class="form-horizontal" action="" method="post">
+                        <!-- 用户名输入 -->
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-user"></span></span>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="用户名" value="20180804">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 密码输入 -->
+                        <div class="form-group">
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-lock"></span></span>
+                                        <input type="password" id="password" name="password" class="form-control" placeholder="密码" value="123456">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 用户类型选择 -->
+                        <div class="radio-group">
+                            <input type="radio" name="radioname" id="radioname1" value="学生" checked="checked">学生&nbsp;
+                            <input type="radio" name="radioname" id="radioname2" value="实习指导老师" >实习指导老师&nbsp;
+                            <input type="radio" name="radioname" id="radioname3" value="项目负责人">项目负责人
+                        </div>
+
+                        <!-- 登录重置按钮 -->
+                        <div class="form-group form-actions">
+                            <div class="col-xs-12 text-center">
+                                <button type="button" id="login" class="btn btn-sm btn-success" >
+                                    <span class="fa fa-check-circle"></span>登录
+                                </button>
+                                <button type="button" id="reset" class="btn btn-sm btn-danger">
+                                    <span class="fa fa-close"></span> 重置
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>
