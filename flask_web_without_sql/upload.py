@@ -11,8 +11,7 @@ import pydicom
 import numpy as np
 
 app = Flask(__name__)
-bootstrap=Bootstrap(app)
-
+bootstrap = Bootstrap(app)
 
 # 设置允许的文件格式
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg','dcm'])
@@ -89,10 +88,23 @@ def manual_segment():
         file_path = path + f.filename  # 图片路径和名称
         print(file_path)
         f.save(file_path)  # 保存图片
-        img = cv2.imread(file_path)
+
+        # 到本地文件读取图片并且显示在网页上
+        (shotname, extension) = os.path.splitext(f.filename)
+        if (extension == '.dcm'):
+            dcm = pydicom.read_file(file_path)
+            img = dcm.pixel_array
+            img = np.float32(img)
+        else:
+            img = cv2.imread(file_path)
         cv2.imwrite(os.path.join(path, 'manual_picture.jpg'), img)
         return render_template('manual_segment_upload.html')
     return render_template('manual_segment.html')
+
+# 手动分割之后的图片上传到服务器
+#@app.route('/upload_to_server', methods=['POST', 'GET'])
+
+
 
 if __name__ =='__main__':
     app.run(debug=True)
