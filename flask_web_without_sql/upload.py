@@ -6,7 +6,7 @@ import os
 import cv2
 import datetime
 from flask_bootstrap import Bootstrap
-from medical_image import medical_image
+#from medical_image import medical_image
 import Class_Predict
 import pydicom
 import numpy as np
@@ -97,14 +97,14 @@ def manual_segment():
         file_path = path + f.filename  # 图片路径和名称
         print(file_path)
         
-        print('uploading')
-        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        image_write = medical_image(user_temp,nowTime,type_temp,file_path)
-        image_write.connect_to_database(host,username,password,database_name)
-        image_write.insert(table_name)
-        image_write.commit_database()
-        image_write.disconnect_database()
-        print('uploaded')
+        # print('uploading')
+        # nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        # image_write = medical_image(user_temp,nowTime,type_temp,file_path)
+        # image_write.connect_to_database(host,username,password,database_name)
+        # image_write.insert(table_name)
+        # image_write.commit_database()
+        # image_write.disconnect_database()
+        # print('uploaded')
         
         f.save(file_path)  # 保存图片
 

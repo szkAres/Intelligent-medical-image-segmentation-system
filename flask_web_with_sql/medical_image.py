@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql as MySQLdb
 
 class medical_image():
     
