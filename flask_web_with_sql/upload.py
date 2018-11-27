@@ -22,6 +22,8 @@ type_temp = 'fat'
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
+mPredict = Class_Predict.MyPredict()
+
 # 设置允许的文件格式
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg','dcm'])
 def allowed_file(filename):
@@ -82,7 +84,6 @@ def segmentation_type():
 
 @app.route('/auto_belly_segment')
 def auto_belly_segment():
-    mPredict = Class_Predict.MyPredict()
     mPredict.LoadPic()
     mPredict.PredictPic()
     mPredict.SavePic()
@@ -122,8 +123,6 @@ def manual_segment():
 
 # 手动分割之后的图片上传到服务器
 #@app.route('/upload_to_server', methods=['POST', 'GET'])
-
-
 
 if __name__ =='__main__':
     app.run(host='0.0.0.0', port=8000)
