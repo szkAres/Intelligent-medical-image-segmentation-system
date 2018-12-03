@@ -7,15 +7,17 @@ import cv2
 import datetime
 from flask_bootstrap import Bootstrap
 from medical_image import medical_image
+from class_user import class_user
 import Class_Predict
 import pydicom
 import numpy as np
 
 host = "localhost"
 username = "root"
-password = "123456"
-database_name = "mysql"
+password = "temppwd"
+database_name = "flask_sql"
 table_name = "ImagesDatabase"
+user_table_name = "UsersDatabase"
 user_temp = 'Ray'
 type_temp = 'fat'
 
@@ -34,8 +36,26 @@ app.send_file_max_age_default = datetime.timedelta(seconds=1)
 basepath = os.path.dirname(__file__)
 
 # 用户登录
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        username_login = request.form['username']
+        password_login = request.form['password']
+        
+        user_login = class_user(username_login)
+        user_login.connect_to_database(host,username,password,database_name)
+        user_login.user_check(user_table_name)
+        user_login.disconnect_database()
+        
+        if user_login.exist == False:
+            return jsonify({'status': '-1', 'errmsg': 'user does not exist!'})
+        elif password_login == user_login.Password:
+            global user_temp
+            user_temp = user_login.User
+            return redirect(url_for('choose'))  # url_for后面加的是函数名
+        else :
+            return jsonify({'status': '-1', 'errmsg': 'password is wrong!'})
+
     return render_template('login.html')
 
 # 选择分割方式，radio实现
@@ -125,5 +145,5 @@ def manual_segment():
 #@app.route('/upload_to_server', methods=['POST', 'GET'])
 
 if __name__ =='__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(debug=False,host='0.0.0.0', port=8000)
 
