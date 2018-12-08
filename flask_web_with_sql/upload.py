@@ -58,6 +58,33 @@ def login():
 
     return render_template('login.html')
 
+# 用户登录
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username_register = request.form['register_username']
+        password_register = request.form['register_password']
+        re_password_register = request.form['register_re_password']
+        
+        user_register = class_user(username_register)
+        user_register.connect_to_database(host,username,password,database_name)
+        user_register.user_check(user_table_name)
+        user_register.disconnect_database()
+        
+        if user_register.exist == True:
+            return jsonify({'status': '-1', 'errmsg': 'user exists!'})
+        else:
+            if password_register == re_password_register:
+                registerTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                user_register.connect_to_database(host,username,password,database_name)
+                user_register.user_create(user_table_name,password_register,registerTime,False)
+                user_register.disconnect_database()
+                return redirect(url_for('login'))
+            else:
+                return jsonify({'status': '-1', 'errmsg': 'password is not same!'})
+
+    return render_template('register.html')
+
 # 选择分割方式，radio实现
 @app.route('/choose', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
 def choose():
@@ -145,5 +172,5 @@ def manual_segment():
 #@app.route('/upload_to_server', methods=['POST', 'GET'])
 
 if __name__ =='__main__':
-    app.run(debug=False,host='0.0.0.0', port=8000)
+    app.run(debug=False)#,host='0.0.0.0', port=8000)
 
