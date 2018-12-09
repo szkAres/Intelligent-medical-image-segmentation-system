@@ -165,7 +165,7 @@ def manual_segment():
         else:
             img = cv2.imread(file_path)
         cv2.imwrite(os.path.join(path, 'manual_picture.jpg'), img)
-        return render_template('manual_segment_upload.html')
+        return render_template('auto_segment_upload.html')
     return render_template('manual_segment.html')
 
 # 手动分割之后的图片上传到服务器
