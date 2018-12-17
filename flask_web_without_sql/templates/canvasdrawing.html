@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        var bot;//画布div
+        var X,Y,X1,Y1;//坐标
+        var flag=0;
+        var time;//定时器ID
+        var color=0;//记住所选颜色
+        var lineW=2;//画笔粗细
+        var canvas;//创建画布
+        var context;//获取上下文
+        <!--var img=document.getElementById("tulip");-->
+        var isMouseDown=false;//记录鼠标是否按下
+        window.onload=function()
+        {
+            //创建画布
+            canvas=document.getElementById("can");
+            //获取上下文
+            context=canvas.getContext("2d");
+            bot=document.getElementById("bottom");
+            bot.onmousedown=mouseDownAction;
+            bot.onmousemove=mouseMoveAction;
+            document.onmouseup=mouseUpAction;
+        }
+        /**
+         *选中画笔颜色
+         */
+        function pen_click(num){
+            var chk=document.getElementsByTagName("input");
+            for(var i=0;i<chk.length;i++){
+                if(i==num){
+                    chk[i].checked=true;
+                    color=i;
+                }else {
+                    chk[i].checked="";
+                }
+            }
+        }
+
+        /**
+         * 画笔粗细
+         */
+        function line_wid(num){
+            lineW=num;
+        }
+
+        /**
+         *鼠标按下
+         */
+        function mouseDownAction(e){
+            isMouseDown=true;
+            //记录下鼠标点击的时候的位置
+            X= e.offsetX;
+            Y= e.offsetY;
+        }
+
+        /**
+         *鼠标移动
+         */
+        function mouseMoveAction(e){
+            if(isMouseDown){
+                X1= e.offsetX;
+                Y1= e.offsetY;
+                drowline(X,Y,X1,Y1);
+                flag++;
+            }
+        }
+
+        /**
+         *鼠标弹起来
+         */
+        function mouseUpAction(e){
+            isMouseDown=false;
+            flag=0;
+        }
+
+        /**
+         * 绘制
+         */
+        function drowline(num1,num2,num3,num4){
+            //开启新的路径
+            if(flag)
+                context.beginPath();
+            //移动画笔的初始位置
+            context.moveTo(num1,num2);
+            context.lineWidth=lineW;
+            if(color==0){
+                context.strokeStyle="red";
+            }else if(color==1){
+                context.strokeStyle="green";
+            }else if(color==2){
+                context.strokeStyle="blue";
+            }
+            //移动画笔的结束位置
+            context.lineTo(num3,num4);
+            //开始绘制
+            context.stroke();
+
+            if(flag!=0){
+                X=X1;
+                Y=Y1;
+            }
+        }
+
+        function save_pic(){//保存画图
+            var div=document.getElementsByClassName("div");
+            if(div[div.length-1].innerHTML!=""){
+                alert("存储空间已满，无法保存，请清除空间！")
+            }
+            var str=canvas.toDataURL("image/png",0.92);
+            for(var i=0;i<div.length;i++){
+                if(div[i].innerHTML==""){
+                    var s="<img src='"+str+"' style='width: 250px;height: 250px;'>";
+                    div[i].innerHTML=s;
+                    break;
+                }
+            }
+        }
+
+        function clear_pic(){//清除画布
+            context.clearRect(0,0,500,500);
+        }
+
+        function clear_save(){//清除保存
+            var div=document.getElementsByClassName("div");
+            for(var i=0;i<div.length;i++){
+                div[i].innerHTML="";
+            }
+        }
+    </script>
+</head>
+<body>
+<div id="left">
+    <div id="top">
+        <div class="top_left"><!-- 画笔颜色选择 -->
+            <img src="img/pen_red.gif" style="border: 2px solid transparent" onclick="pen_click(0)"><input type="checkbox" style="position: absolute;top: 38px;left: 88px" checked onclick="pen_click(0)">
+            <img src="img/pen_green.gif" style="border: 2px solid transparent" onclick="pen_click(1)"><input type="checkbox" style="position: absolute;top: 38px;left: 145px" onclick="pen_click(1)">
+            <img src="img/pen_blue.gif" style="border: 2px solid transparent" onclick="pen_click(2)"><input type="checkbox" style="position: absolute;top: 38px;left: 202px" onclick="pen_click(2)">
+        </div>
+        <div class="top_right"><!-- 画笔粗细选择 -->
+            <img src="img/pen_thin.gif" onclick="line_wid(2)">
+            <img src="img/pen_medium.gif" onclick="line_wid(4)">&nbsp;&nbsp;&nbsp;
+            <img src="img/pen_thick.gif" onclick="line_wid(8)">
+        </div>
+    </div>
+    <div id="bottom"><!-- 画板 -->
+        <canvas id="can" width="500" height="500"></canvas>
+    </div>
+</div>
+<div class="bottom">
+    <hr>
+    <input type="button" value="保存图片" style="position: absolute;top: 560px;left: 0px" onclick="save_pic()">
+    <input type="button" value="清除画布" style="position: absolute;top: 560px;left: 66px"onclick="clear_pic()">
+    <input type="button" value="清除保存" style="position: absolute;top: 560px;left: 132px"onclick="clear_save()">
+</div>
+</body>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    #left{
+        width: 500px;
+        height: 550px;
+        float: left;
+    }
+    .top_left{
+        margin-left: 50px;
+        float: left;
+    }
+    .top_right{
+        margin-right: 50px;
+        float: right;
+    }
+    #bottom{
+        width: 500px;
+        height: 500px;
+        border: solid 2px coral;
+        float: left;
+    }
+    #right{
+        width: 826px;
+        height: 550px;
+        border: solid 2px red;
+        float: right;
+    }
+    .div{
+        width: 250px;
+        height: 250px;
+        border: solid 2px orange;
+        margin: 15px 0 0 15px;
+        float: left;
+    }
+</style>
+</html>
