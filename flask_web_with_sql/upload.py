@@ -11,6 +11,7 @@ from class_user import class_user
 import Class_Predict
 import pydicom
 import numpy as np
+from DicomProcess import *
 
 host = "localhost"
 username = "root"
@@ -20,6 +21,8 @@ table_name = "ImagesDatabase"
 user_table_name = "UsersDatabase"
 user_temp = 'Ray'
 type_temp = 'fat'
+
+manual_picture_path_global = '/'
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -95,6 +98,39 @@ def choose():
         return redirect(url_for('manual_segment'))
     return render_template('choose_method.html')
 
+# 选择分割方式，radio实现
+@app.route('/windowChoose', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def windowChoose():
+    if request.method == 'POST':
+        centerSet = request.form['center']
+        widthSet = request.form['width']
+        centerSetF = float(centerSet)
+        widthSetF = float(widthSet)
+        myPreProcess = MyDicomPreProcess()
+        myPreProcess.ImportPic(manual_picture_path_global)
+        myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
+        myPreProcess.SavePic()
+    '''
+    chooseType = request.values.get('windowChooseType')
+    if chooseType == 'type1':
+         myPreProcess = MyDicomPreProcess()
+         myPreProcess.ImportPic(manual_picture_path_global)
+         myPreProcess.ChangeWindowCenterAndWidth(Center=500,Width=500)
+         myPreProcess.SavePic()
+    if chooseType =='type2':
+         myPreProcess = MyDicomPreProcess()
+         myPreProcess.ImportPic(manual_picture_path_global)
+         myPreProcess.ChangeWindowCenterAndWidth(Center=352,Width=705)
+         myPreProcess.SavePic()
+    if chooseType =='type3':
+         myPreProcess = MyDicomPreProcess()
+         myPreProcess.ImportPic(manual_picture_path_global)
+         myPreProcess.ChangeWindowCenterAndWidth(Center=200,Width=900)
+         myPreProcess.SavePic()
+    '''
+    
+    return render_template('Big_Little_Drag_Function.html')
+
 # 自动分割处理图片上传
 @app.route('/auto_segment', methods=['POST', 'GET'])   # 添加路由
 def auto_segment():
@@ -144,6 +180,8 @@ def manual_segment():
         path = basepath + "/static/manual_photos/"
         file_path = path + f.filename  # 图片路径和名称
         print(file_path)
+        global manual_picture_path_global
+        manual_picture_path_global = file_path
         
         print('uploading')
         nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -165,7 +203,7 @@ def manual_segment():
         else:
             img = cv2.imread(file_path)
         cv2.imwrite(os.path.join(path, 'manual_picture.jpg'), img)
-        return render_template('auto_segment_upload.html')
+        return redirect(url_for('windowChoose')) 
     return render_template('manual_segment.html')
 
 # 手动分割之后的图片上传到服务器
