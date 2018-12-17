@@ -144,7 +144,7 @@ class myUnet():
         conv9 = Conv2D(2, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
         conv10 = Conv2D(3, 1, activation='sigmoid')(conv9)
 
-        model = Model(input=inputs, output=conv10)
+        model = Model(inputs=inputs, outputs=conv10)
 
         model.compile(optimizer=Adam(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 

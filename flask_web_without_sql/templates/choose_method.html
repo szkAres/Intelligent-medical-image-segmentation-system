@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block page_content %}
+<head>
+    <style>
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
+    </style>
+<div class="page-header">
+    <h1 style="text-align:center">选择分割方式</h1>
+</div>
+<body background="/static/background/background.jpg">
+
+<div class="main">
+    <form role="form" method="post" action="choose">
+        <label class="radio-inline">
+            <input type="radio" name="segment_way" value="auto" checked="checked">自动分割
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="segment_way" value="manual">手动分割
+        </label>
+        <div class="form-group">
+            <input type="submit" class="btn btn-default" onclick="alert('成功')" value="确定" />
+        </div>
+    </form>
+</div>
+{% endblock %}

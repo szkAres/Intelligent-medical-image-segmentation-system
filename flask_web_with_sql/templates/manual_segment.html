@@ -1,26 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block page_content %}
 <head>
-    <meta charset="UTF-8">
-    <title>手动分割</title>
-</head>
-<body background="/static/picture/background.jpg">
-<h1>手动</h1>
-
-<div class="main">
-    <h2 style="text-align:center">请问需要对图像进行一些基本操作吗？</h2>
-    <form style="text-align:center" role="form" method="post" action="choose2">
-        <label class="radio-inline">
-            <input type="radio" name="whether_basic_operation" value="Yes" checked="checked">需要
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="whether_basic_operation" value="No">不需要
-        </label>
-         <div class="form-group">
-            <input type="submit" class="btn btn-default" onclick="alert('成功')" value="确定" />
-        </div>
-    </form>
-
+    <style>
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
+    </style>
+<div class="page-header">
+    <h1 style="text-align:center">上传需要手动分割的图片</h1>
 </div>
-</body>
-</html>
+<body background="/static/background/background.jpg">
+<div class="main">
+    <form role="form" action="manual_segment" enctype='multipart/form-data' method='POST'>
+    <div class="form-group">
+        <input type="file" name="file", style="margin-top:20px;"/>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="上传" class="btn btn-default" />
+    </div>
+    </form>
+</div>
+
+{% endblock %}

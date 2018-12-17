@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block page_content %}
+<head>
+    <style>
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
+    </style>
+<div class="page-header">
+    <h1 style="text-align:center">上传需要进行分割的图片</h1>
+</div>
+<body background="/static/background/background.jpg">
+<div class="main">
+    <form role="form" action="manual_segment" enctype='multipart/form-data' method='POST'>
+    <div class="form-group">
+        <input type="file" name="file", style="margin-top:20px;"/>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="上传" class="btn btn-default" />
+    </div>
+    </form>
+</div>
+
+<div class="main">
+<h3 >原图显示</h3>
+<img src="{{url_for('static', filename='./manual_photos/manual_picture.jpg')}}" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
+</div>
+
+<div class="main">
+    <h3 style="text-align:center">手动分割指南</h3>
+    <p>请按照步骤来进行处理</p>
+    <p>第一步：按住鼠标左键不放,请选择出感兴趣的分割的区域</p>
+    <p>第二步：确认自动分割结束后，点击按钮将照片上传</p>
+</div>
+
+
+<div class="main">
+
+    <!---  <h3 style="text-align:center">选择分割类型</h3>  --->
+    <form role="form" method="post" action="segmentation_type">
+  <!---       <label class="radio-inline">
+            <input type="radio" name="segment_type" value="AAT" checked="checked">腹部脂肪分割
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="segment_type" value="Brain segmentation">颅脑分割
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="segment_type" value="Right ventricle segmentation">右心室分割
+        </label>
+
+--->
+        <div class="form-group">
+              <form  action="upload_to_server" enctype='multipart/form-data' method='POST'>
+                     <input type="button" class="btn btn-default" onclick="alert('上传成功')" value="上传图片到服务器" />
+              </form>
+        </div>
+    </form>
+</div>>
+{% endblock %}

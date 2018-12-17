@@ -4,3 +4,8 @@ flask_web_without_sql/static/picture/
 flask_web_without_sql/static/photos/
 *.jpg
 *.pyc
+*.dcm
+*.hdf5
+*.iml
+*.xml
+*.png

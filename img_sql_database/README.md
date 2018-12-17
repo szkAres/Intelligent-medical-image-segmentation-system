@@ -1,4 +1,6 @@
 ﻿https://blog.csdn.net/weixin_40396510/article/details/79277731
+
+https://www.cnblogs.com/laumians-notes/p/9069498.html(这个链接步骤更加详细)
 主要安装配置过程参照以上的链接，几点注意：
 1.我电脑上装的是8.0.2版本，建议统一成一样的，8.0附近的也可以,否则一些语句可能不兼容；
 2.配置流程基本一样，但最后设置密码文中是5.7版本，文中的方法有点问题，可以参考文章下面的评论或百度一下报错信息找下解决方法；
@@ -38,3 +40,10 @@ Mike 2018-10-19 20:00:02 fat e:/img2
 database disconnected
 
 image_table_test.py 程序运行会输出数据库列表中数据，此处不具体列举
+
+
+
+
+
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'aaa';

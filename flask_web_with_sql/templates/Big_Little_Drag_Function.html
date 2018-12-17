@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual_Segment</title>
+    <style>
+        div{width:700px;height:700px;overflow:hidden;position:relative;border:1px solid #000;}
+        div img{position:absolute;height:100%;width:auto;cursor:move;}
+    </style>
+</head>
+<body>
+<div id="div" onmousewheel="return bbimg(this)">
+    <!--此处设置传入的图片名称或者URL,待与前端其他页面继续整合-->
+    <img id="img" border="0" src="static/manual_photos/manual_picture.jpg" />
+</div>
+<script language="javascript">
+    var params = {
+        zoomVal:1,
+        left: 0,
+        top: 0,
+        currentX: 0,
+        currentY: 0,
+        flag: false
+    };
+
+    //图片缩放
+    function bbimg(o){
+        var o=o.getElementsByTagName("img")[0];
+        params.zoomVal+=event.wheelDelta/8000;
+        if (params.zoomVal >= 0.2) {
+            o.style.transform="scale("+params.zoomVal+")";
+        } else {
+            params.zoomVal=0.2;
+            o.style.transform="scale("+params.zoomVal+")";
+            return false;
+        }
+    }
+
+    //获取相关CSS属性
+    var getCss = function(o,key){
+        return o.currentStyle? o.currentStyle[key] : document.defaultView.getComputedStyle(o,false)[key];
+    };
+
+    //拖拽的实现
+    var startDrag = function(bar, target, callback){
+        if(getCss(target, "left") !== "auto"){
+            params.left = getCss(target, "left");
+        }
+        if(getCss(target, "top") !== "auto"){
+            params.top = getCss(target, "top");
+        }
+        //o是移动对象
+        bar.onmousedown = function(event){
+            if(1 == event.which)
+                params.flag = true; //鼠标左键才能拖拽
+            if(!event){
+                event = window.event;
+                //防止IE文字选中
+                bar.onselectstart = function(){
+                    return false;
+                }
+            }
+            var e = event;
+            params.currentX = e.clientX;
+            params.currentY = e.clientY;
+        };
+        document.onmouseup = function(){
+            params.flag = false;    //鼠标按键抬起后取消移动flag
+            if(getCss(target, "left") !== "auto"){
+                params.left = getCss(target, "left");
+            }
+            if(getCss(target, "top") !== "auto"){
+                params.top = getCss(target, "top");
+            }
+        };
+        document.onmousemove = function(event){
+            var e = event ? event: window.event;
+
+            if(params.flag){
+                var nowX = e.clientX, nowY = e.clientY;
+                var disX = nowX - params.currentX, disY = nowY - params.currentY;
+                target.style.left = parseInt(params.left) + disX+ "px";
+                target.style.top = parseInt(params.top) + disY+ "px";
+
+                if (typeof callback == "function") {
+                    callback((parseInt(params.left) || 0) + disX, (parseInt(params.top) || 0) + disY);
+                }
+
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                return false;
+            }
+        }
+    };
+    startDrag(document.getElementById("img"),document.getElementById("img"))
+
+    //禁用右键菜单
+    //document.oncontextmenu = function(){event.returnValue = false;}
+</script>
+</body>
+
+<div class="main">
+    <form role="form" method="post" action="windowChoose">
+        <input type="text" placeholder="window center" name="center" id="center">
+        <input type="text" placeholder="window width" name="width" id="width">
+        <!--
+        <label class="radio-inline">
+            <input type="radio" name="windowChooseType" value="type1" checked="checked">窗宽窗位1(500 500)
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="windowChooseType" value="type2">窗宽窗位2(352 705)
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="windowChooseType" value="type3">窗宽窗位3(200 900)
+        </label>
+        -->
+        <div class="form-group">
+            <input type="submit" class="btn btn-default" />
+        </div>
+    </form>
+</div>
+
+</html>
