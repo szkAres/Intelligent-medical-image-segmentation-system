@@ -41,7 +41,7 @@ class MyDicomPreProcess():
                     self.ChangedPic[i][j] =(self.Pixel[i][j] - min)*255/(max-min)
 
     def SavePic(self):
-        cv2.imwrite(self.basepath+'//static/manual_photos/manual_picture.jpg', self.ChangedPic)
+        cv2.imwrite(self.basepath+'//static/manual_photos/manual_picture_window_changed.jpg', self.ChangedPic)
 
 if __name__ =='__main__':
     myPreProcess = MyDicomPreProcess()

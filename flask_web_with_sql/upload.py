@@ -89,6 +89,25 @@ def register():
     return render_template('register.html')
 
 # 选择分割方式，radio实现
+@app.route('/draw', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def draw():
+    if request.method == 'POST':
+        path = basepath + "/static/manual_photos/manual_picture_window_changed.jpg"
+        file_path = path
+        print(file_path)
+        
+        print('uploading')
+        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        image_write = medical_image(user_temp,nowTime,type_temp,file_path)
+        image_write.connect_to_database(host,username,password,database_name)
+        image_write.insert(table_name)
+        image_write.commit_database()
+        image_write.disconnect_database()
+        print('uploaded')
+        
+    return render_template('canvasdrawing.html')
+
+# 选择分割方式，radio实现
 @app.route('/choose', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
 def choose():
     segment = request.values.get('segment_way')
@@ -110,24 +129,6 @@ def windowChoose():
         myPreProcess.ImportPic(manual_picture_path_global)
         myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
         myPreProcess.SavePic()
-    '''
-    chooseType = request.values.get('windowChooseType')
-    if chooseType == 'type1':
-         myPreProcess = MyDicomPreProcess()
-         myPreProcess.ImportPic(manual_picture_path_global)
-         myPreProcess.ChangeWindowCenterAndWidth(Center=500,Width=500)
-         myPreProcess.SavePic()
-    if chooseType =='type2':
-         myPreProcess = MyDicomPreProcess()
-         myPreProcess.ImportPic(manual_picture_path_global)
-         myPreProcess.ChangeWindowCenterAndWidth(Center=352,Width=705)
-         myPreProcess.SavePic()
-    if chooseType =='type3':
-         myPreProcess = MyDicomPreProcess()
-         myPreProcess.ImportPic(manual_picture_path_global)
-         myPreProcess.ChangeWindowCenterAndWidth(Center=200,Width=900)
-         myPreProcess.SavePic()
-    '''
     
     return render_template('Big_Little_Drag_Function.html')
 
@@ -183,6 +184,7 @@ def manual_segment():
         global manual_picture_path_global
         manual_picture_path_global = file_path
         
+        '''
         print('uploading')
         nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         image_write = medical_image(user_temp,nowTime,type_temp,file_path)
@@ -191,6 +193,7 @@ def manual_segment():
         image_write.commit_database()
         image_write.disconnect_database()
         print('uploaded')
+        '''
         
         f.save(file_path)  # 保存图片
 

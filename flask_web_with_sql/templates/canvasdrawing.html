@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        var bot;//画布div
+        var X,Y,X1,Y1;//坐标
+        var flag=0;
+        var time;//定时器ID
+        var canvas;//创建画布
+        var context;//获取上下文
+        var img = new Image();   // 创建一个<img>元素;
+        img.src = '../static/manual_photos/manual_picture_window_changed.jpg';
+        var isMouseDown=false;//记录鼠标是否按下
+        window.onload=function()
+        {
+            //创建画布
+            canvas=document.getElementById("can");
+            //获取上下文
+            context=canvas.getContext("2d");
+            bot=document.getElementById("bottom");
+            bot.onmousedown=mouseDownAction;
+            bot.onmousemove=mouseMoveAction;
+            document.onmouseup=mouseUpAction;
+            context.drawImage(img,0,0);
+        }
+
+        /**
+         *鼠标按下
+         */
+        function mouseDownAction(e){
+            isMouseDown=true;
+            //记录下鼠标点击的时候的位置
+            X= e.offsetX;
+            Y= e.offsetY;
+        }
+
+        /**
+         *鼠标移动
+         */
+        function mouseMoveAction(e){
+            if(isMouseDown){
+                X1= e.offsetX;
+                Y1= e.offsetY;
+                drowline(X,Y,X1,Y1);
+                flag++;
+            }
+        }
+
+        /**
+         *鼠标弹起来
+         */
+        function mouseUpAction(e){
+            isMouseDown=false;
+            flag=0;
+        }
+
+        /**
+         * 绘制
+         */
+        function drowline(num1,num2,num3,num4){
+            //开启新的路径
+            if(flag)
+                context.beginPath();
+            //移动画笔的初始位置
+            context.moveTo(num1,num2);
+            context.lineWidth=2;
+            context.strokeStyle="red";
+            //移动画笔的结束位置
+            context.lineTo(num3,num4);
+            //开始绘制
+            context.stroke();
+
+            if(flag!=0){
+                X=X1;
+                Y=Y1;
+            }
+        }
+
+        function convertBase64UrlToBlob(urlData,type){
+            var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
+            //处理异常,将ascii码小于0的转换为大于0
+            var ab = new ArrayBuffer(bytes.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < bytes.length; i++) {
+                ia[i] = bytes.charCodeAt(i);
+            }
+            return new Blob( [ab] , {type : 'image/'+type});
+        }
+
+        function save_pic(){//保存画图    
+            var ctx = document.getElementById('can');
+            var dataURL = ctx.toDataURL("image/png",1.0);
+            var file1=convertBase64UrlToBlob(dataURL,"png");
+            var filename=$("#textfield").val();
+            filename=filename.split("\\");
+            file1.name=filename[filename.length-1];
+            var formobj =  document.getElementById("uploadForm");
+            var formdata = new FormData(formobj);
+            formdata.set("file", file1,file1.name);
+            $.ajax({
+                url : "http://localhost:5000/material/upload",
+                type : "POST",
+                data : formdata,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success : function(data) {
+                    $( '#serverResponse').html(data);
+                },
+                    error : function(data) {
+                    $( '#serverResponse').html(data.status + " : " + data.statusText + " : " + data.responseText);
+                }
+            })
+        }
+
+        function clear_pic(){//清除画布
+            context.clearRect(0,0,500,500);
+        }
+    </script>
+</head>
+<body>
+<div id="left">
+    <div id="bottom"><!-- 画板 -->
+        <canvas id="can" width="500" height="500"></canvas>
+    </div>
+</div>
+<div class="bottom">
+    <hr>
+    <input type="button" value="保存图片" style="position: absolute;top: 560px;left: 0px" onclick="save_pic()">
+    <input type="button" value="清除画布" style="position: absolute;top: 560px;left: 66px"onclick="clear_pic()">
+</div>
+<form role="form" method="post" action="draw">
+    <input type="submit" value="上传到服务器" class="btn btn-default" onclick="alert('成功')" value="确定" />
+</form>
+</body>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    #left{
+        width: 500px;
+        height: 550px;
+        float: left;
+    }
+    .top_left{
+        margin-left: 50px;
+        float: left;
+    }
+    .top_right{
+        margin-right: 50px;
+        float: right;
+    }
+    #bottom{
+        width: 500px;
+        height: 500px;
+        border: solid 2px coral;
+        float: left;
+    }
+    #right{
+        width: 826px;
+        height: 550px;
+        border: solid 2px red;
+        float: right;
+    }
+    .div{
+        width: 250px;
+        height: 250px;
+        border: solid 2px orange;
+        margin: 15px 0 0 15px;
+        float: left;
+    }
+</style>
+</html>
