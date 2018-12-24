@@ -8,6 +8,8 @@
     margin: 0px auto;
     }
     </style>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
 <div class="page-header">
     <h1 style="text-align:center">上传需要进行分割的图片</h1>
 </div>
@@ -53,7 +55,7 @@
 --->
         <div class="form-group">
               <form  action="upload_to_server" enctype='multipart/form-data' method='POST'>
-                     <input type="button" class="btn btn-default" onclick="alert('上传成功')" value="上传图片到服务器" />
+                  <input type="submit" class="button green" onclick="alert('上传成功')" value="上传图片到服务器" />
               </form>
         </div>
     </form>

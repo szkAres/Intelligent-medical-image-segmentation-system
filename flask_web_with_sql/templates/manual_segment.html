@@ -8,6 +8,8 @@
     margin: 0px auto;
     }
     </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
 <div class="page-header">
     <h1 style="text-align:center">上传需要手动分割的图片</h1>
 </div>
@@ -17,8 +19,8 @@
     <div class="form-group">
         <input type="file" name="file", style="margin-top:20px;"/>
     </div>
-    <div class="form-group">
-        <input type="submit" value="下一步：调整窗宽窗位" class="btn btn-default" />
+   <div class="form-group">
+       <input class='button green' type="submit" value="上传"  />
     </div>
     </form>
 </div>

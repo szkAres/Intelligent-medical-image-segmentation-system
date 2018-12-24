@@ -8,6 +8,8 @@
     margin: 0px auto;
     }
     </style>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
 <div class="page-header">
     <h1 style="text-align:center">选择分割方式</h1>
 </div>
@@ -21,9 +23,12 @@
         <label class="radio-inline">
             <input type="radio" name="segment_way" value="manual">手动分割
         </label>
+        <p>
+        <br>
         <div class="form-group">
-            <input type="submit" class="btn btn-default" onclick="alert('成功')" value="确定" />
+            <input class="button green" type="submit" onclick="alert('成功')"  value="确定" />
         </div>
+        </p>
     </form>
 </div>
 {% endblock %}
