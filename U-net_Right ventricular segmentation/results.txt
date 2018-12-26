@@ -1,0 +1,2 @@
+Average All rate: 0.99079746
+Average Part rate: 0.91887873
