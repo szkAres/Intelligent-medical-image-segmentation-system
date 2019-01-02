@@ -8,6 +8,8 @@
     margin: 0px auto;
     }
     </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
 <div class="page-header">
     <h1 style="text-align:center">自动分割后的结果显示</h1>
 </div>
@@ -15,6 +17,19 @@
 
 <div class="main">
    <img src="{{url_for('static', filename='./after_auto_belly_photo/after_auto_belly_temp.jpg')}}" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
+</div>
+
+<div class="main">
+    <form role="form" method="post" action="auto_segment">
+        <div class="form-group">
+            <input class='button green' type="submit" value="继续自动分割下一张图片"/>
+        </div>
+    </form>
+    <form role="form" method="post" action="choose">
+        <div class="form-group">
+            <input class='button green' type="submit" value="回到首页"/>
+        </div>
+    </form>
 </div>
 
 
