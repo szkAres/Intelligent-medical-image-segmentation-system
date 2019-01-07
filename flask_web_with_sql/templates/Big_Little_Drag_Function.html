@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block page_content %}
 <head>
-    <meta charset="UTF-8">
-    <title>Manual_Segment</title>
     <style>
-        div{width:700px;height:700px;overflow:hidden;position:relative;border:1px solid #000;}
-        div img{position:absolute;height:100%;width:auto;cursor:move;}
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
     </style>
-</head>
-<body>
-<div id="div" onmousewheel="return bbimg(this)">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
+<div class="page-header">
+    <h1 style="text-align:center">窗宽窗位调整</h1>
+</div>
+<body background="/static/background/background.jpg">
+
+<!--div class="main" id="div" onmousewheel="return bbimg(this)"-->
     <!--此处设置传入的图片名称或者URL,待与前端其他页面继续整合-->
+<div class="main" id="div">
     <img id="img" border="0" src="static/manual_photos/manual_picture_window_changed.jpg" />
 </div>
 <script language="javascript">
@@ -98,16 +105,18 @@
     //禁用右键菜单
     //document.oncontextmenu = function(){event.returnValue = false;}
 </script>
-    <form role="form" method="post" action="windowChoose">
-        <input type="text" placeholder="window center" name="center" id="center">
-        <input type="text" placeholder="window width" name="width" id="width">
-        <input type="submit" value="修改窗宽窗位" class="btn btn-default" />
-    </form>
-    <form role="form" method="post" action="draw">
-        <input type="submit" value="下一步：勾画" class="btn btn-default" />
-    </form>
+    <div class="main">
+        <form role="form" method="post" action="windowChoose">
+            <input type="text" placeholder="window center" name="center" id="center">
+            <input type="text" placeholder="window width" name="width" id="width">
+            <input class='button green' type="submit" value="修改窗宽窗位" />
+        </form>
+    </div>
+    <div class="main">
+        <form role="form" method="post" action="draw">
+            <input class='button green' type="submit" value="下一步：勾画" />
+        </form>
+    </div>
 </body>
 
-
-
-</html>
+{% endblock %}

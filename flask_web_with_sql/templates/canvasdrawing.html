@@ -1,7 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block page_content %}
 <head>
-    <meta charset="UTF-8">
+    <style>
+    .main{
+    text-align: center;
+    width: 300px;
+    margin: 0px auto;
+    }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
+
     <script type="text/javascript">
         var bot;//画布div
         var X,Y,X1,Y1;//坐标
@@ -88,51 +96,68 @@
             return new Blob( [ab] , {type : 'image/'+type});
         }
 
-        function save_pic(){//保存画图    
-            var ctx = document.getElementById('can');
-            var dataURL = ctx.toDataURL("image/png",1.0);
-            var file1=convertBase64UrlToBlob(dataURL,"png");
-            var filename=$("#textfield").val();
-            filename=filename.split("\\");
-            file1.name=filename[filename.length-1];
-            var formobj =  document.getElementById("uploadForm");
-            var formdata = new FormData(formobj);
-            formdata.set("file", file1,file1.name);
-            $.ajax({
-                url : "http://localhost:5000/material/upload",
-                type : "POST",
-                data : formdata,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success : function(data) {
-                    $( '#serverResponse').html(data);
-                },
-                    error : function(data) {
-                    $( '#serverResponse').html(data.status + " : " + data.statusText + " : " + data.responseText);
-                }
-            })
+        function save_pic(){//保存画图
+            // var dataURL=canvas.toDataURL("image/png",0.92);
+            // var oGrayImg = new Image();
+            // oGrayImg.src = canvas.toDataURL("image/png",0.92);
+
+            // var w2 = new File("../static/manual_photos/manual_picture_drawed.png");
+            // byte[] b = decoder.decodeBuffer(str);   
+            // ByteArrayInputStream bais = new ByteArrayInputStream(b);
+            // BufferedImage bi1 = ImageIO.read(bais);
+            // ImageIO.write(bi1, "png", w2);
+            // var file1=convertBase64UrlToBlob(dataURL,"png");
+            // var filename=$("#textfield").val();
+            // filename=filename.split("\\");
+            // file1.name=filename[filename.length-1];
+            // var formobj =  document.getElementById("uploadForm");
+            // var formdata = new FormData(formobj);
+            // formdata.set("file", file1,file1.name);
+            // $.ajax({
+            //     url : "http://localhost:5000/material_upload",
+            //     type : "POST",
+            //     data : formdata,
+            //     cache: false,
+            //     processData: false,
+            //     contentType: false,
+            //     success : function(data) {
+            //         $( '#serverResponse').html(data);
+            //     },
+            //         error : function(data) {
+            //         $( '#serverResponse').html(data.status + " : " + data.statusText + " : " + data.responseText);
+            //     }
+            // })
         }
 
         function clear_pic(){//清除画布
             context.clearRect(0,0,500,500);
         }
     </script>
+
+    <div class="page-header">
+        <h1 style="text-align:center">手动勾画处理</h1>
+    </div>
+
 </head>
-<body>
-<div id="left">
-    <div id="bottom"><!-- 画板 -->
+<body background="/static/background/background.jpg">
+<div class="main" id="left">
+    <div class="main" id="bottom"><!-- 画板 -->
         <canvas id="can" width="500" height="500"></canvas>
     </div>
 </div>
-<div class="bottom">
-    <hr>
-    <input type="button" value="保存图片" style="position: absolute;top: 560px;left: 0px" onclick="save_pic()">
-    <input type="button" value="清除画布" style="position: absolute;top: 560px;left: 66px"onclick="clear_pic()">
+
+<div class="main">
+    <form role="form" method="post" action="draw">
+        <input class='button green' type="submit" value="清除画布" / >
+    </form>
+    <form role="form" method="post" action="manual_segment">
+        <input class='button green' type="submit" value="上传图片"/>
+    </form>
+    <form role="form" method="post" action="choose">
+        <input class='button green' type="submit" value="回到首页"/>
+    </form>
 </div>
-<form role="form" method="post" action="draw">
-    <input type="submit" value="上传到服务器" class="btn btn-default" onclick="alert('成功')" value="确定" />
-</form>
+
 </body>
 <style>
     *{
@@ -172,4 +197,4 @@
         float: left;
     }
 </style>
-</html>
+{% endblock %}

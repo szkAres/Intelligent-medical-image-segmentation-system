@@ -38,7 +38,9 @@ def allowed_file(filename):
 app.send_file_max_age_default = datetime.timedelta(seconds=1)
 basepath = os.path.dirname(__file__)
 
-logined = False
+logined = True
+global_upload_file = None
+global_upload_image = None
 # 用户登录
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -101,21 +103,7 @@ def register():
 def draw():
     global logined
     if logined == False:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        path = basepath + "/static/manual_photos/manual_picture_window_changed.jpg"
-        file_path = path
-        print(file_path)
-        
-        print('uploading')
-        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        image_write = medical_image(user_temp,nowTime,type_temp,file_path)
-        image_write.connect_to_database(host,username,password,database_name)
-        image_write.insert(table_name)
-        image_write.commit_database()
-        image_write.disconnect_database()
-        print('uploaded')
-        
+        return redirect(url_for('login'))        
     return render_template('canvasdrawing.html')
 
 # 选择分割方式，radio实现
@@ -125,8 +113,18 @@ def choose():
     if segment == 'auto':
          return redirect(url_for('auto_segment'))
     if segment =='manual':
-        return redirect(url_for('manual_segment'))
+        return redirect(url_for('uploadChoose'))
     return render_template('choose_method.html')
+
+# 选择上传方式，radio实现
+@app.route('/uploadChoose', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def uploadChoose():
+    upload_way = request.values.get('upload_way')
+    if upload_way == 'directly':
+         return redirect(url_for('manual_segment'))
+    if upload_way =='undirectly':
+        return redirect(url_for('windowChoose'))
+    return render_template('uploadChoose.html')
 
 # 选择分割方式，radio实现
 @app.route('/windowChoose', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
@@ -178,9 +176,32 @@ def auto_segment():
             return render_template('auto_segment_upload.html')
     return render_template('auto_segment.html')
 
-# 自动分割后的图片显示
-
-
+# 选择分割类型(腹部 or  颅脑  or  左心室)
+@app.route('/upload_type', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def upload_type():
+    global logined
+    if logined == False:
+        return redirect(url_for('login'))
+    upload_type = request.values.get('upload_type')
+    nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    filenameTime=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    global global_upload_file
+    global global_upload_image
+    upload_file_path = basepath + "/static/manual_photos/" + upload_type + "/" + filenameTime
+    final_upload_file_path = upload_file_path + global_upload_file.filename
+    #global_upload_file.save(upload_file_path)  # 保存图片
+    
+    cv2.imwrite(final_upload_file_path, global_upload_image)
+    
+    print('uploading')
+    image_write = medical_image(user_temp,nowTime,upload_type,final_upload_file_path)
+    image_write.connect_to_database(host,username,password,database_name)
+    image_write.insert(table_name)
+    image_write.commit_database()
+    image_write.disconnect_database()
+    print('uploaded')
+    return redirect(url_for('uploadChoose'))  # url_for后面加的是函数名
+     
 # 选择分割类型(腹部 or  颅脑  or  左心室)
 @app.route('/segmentation_type', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
 def segmentation_type():
@@ -208,36 +229,34 @@ def manual_segment():
     if logined == False:
         return redirect(url_for('login'))
     if request.method == 'POST':
-        f = request.files['file']
-        path = basepath + "/static/manual_photos/"
-        file_path = path + f.filename  # 图片路径和名称
-        print(file_path)
-        global manual_picture_path_global
-        manual_picture_path_global = file_path
-        
-        '''
-        print('uploading')
-        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        image_write = medical_image(user_temp,nowTime,type_temp,file_path)
-        image_write.connect_to_database(host,username,password,database_name)
-        image_write.insert(table_name)
-        image_write.commit_database()
-        image_write.disconnect_database()
-        print('uploaded')
-        '''
-        
-        f.save(file_path)  # 保存图片
-
-        # 到本地文件读取图片并且显示在网页上
-        (shotname, extension) = os.path.splitext(f.filename)
-        if (extension == '.dcm'):
-            dcm = pydicom.read_file(file_path)
-            img = dcm.pixel_array
-            img = np.float32(img)
-        else:
-            img = cv2.imread(file_path)
-        cv2.imwrite(os.path.join(path, 'manual_picture.jpg'), img)
-        return redirect(url_for('windowChoose')) 
+        post_file_exists = False
+        for check_post_file in request.files:
+            post_file_exists = True
+            
+        if post_file_exists == True:
+            f = request.files['file']
+            global global_upload_file
+            global_upload_file = f
+            path = basepath + "/static/manual_photos/"
+            file_path = path + f.filename  # 图片路径和名称
+            print(file_path)
+            global manual_picture_path_global
+            manual_picture_path_global = file_path
+            
+            f.save(file_path)  # 保存图片
+    
+            # 到本地文件读取图片并且显示在网页上
+            (shotname, extension) = os.path.splitext(f.filename)
+            if (extension == '.dcm'):
+                dcm = pydicom.read_file(file_path)
+                img = dcm.pixel_array
+                img = np.float32(img)
+            else:
+                img = cv2.imread(file_path)
+            cv2.imwrite(os.path.join(path, 'manual_picture.jpg'), img)
+            global global_upload_image
+            global_upload_image = img
+            return render_template('manual_segment_upload.html')
     return render_template('manual_segment.html')
 
 # 手动分割之后的图片上传到服务器
