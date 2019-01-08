@@ -1,6 +1,6 @@
 # https://blog.csdn.net/dcrmg/article/details/81987808?utm_source=blogxgwz0
 # get post用阿嘎https://blog.csdn.net/qq_39974381/article/details/80927642
-from flask import Flask, render_template, request, redirect, url_for, make_response, jsonify,send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, make_response, jsonify,send_from_directory,flash
 from werkzeug.utils import secure_filename
 import os
 import cv2
@@ -16,7 +16,7 @@ from DicomProcess import *
 
 host = "localhost"
 username = "root"
-password = "yangfei"
+password = "ly"         #此处需设置成自己的密码
 database_name = "flask_sql"
 table_name = "ImagesDatabase"
 user_table_name = "UsersDatabase"
@@ -27,6 +27,7 @@ manual_picture_path_global = '/'
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+app.config['SECRET_KEY'] = os.urandom(24)
 
 mPredict = Class_Predict.MyPredict()
 ventricular_Predict = Class_Predict_RightVentricular.MyPredictRightVentricular()
@@ -60,15 +61,17 @@ def login():
             user_login.disconnect_database()
             
             if user_login.exist == False:
-                return jsonify({'status': '-1', 'errmsg': 'user does not exist!'})
+                flash("用户不存在，请注册新用户", 'err')
+                return redirect(url_for('login'))
             elif password_login == user_login.Password:
                 global user_temp
                 user_temp = user_login.User
                 global logined
                 logined = True
                 return redirect(url_for('choose'))  # url_for后面加的是函数名
-            else :
-                return jsonify({'status': '-1', 'errmsg': 'password is wrong!'})
+            else:
+                flash("登录密码错误，请重新输入", 'err')
+                return redirect(url_for('login'))
 
     return render_template('login.html')
 
@@ -86,7 +89,8 @@ def register():
         user_register.disconnect_database()
         
         if user_register.exist == True:
-            return jsonify({'status': '-1', 'errmsg': 'user exists!'})
+            flash("用户已存在，请更换用户名重新注册", 'err')
+            return redirect(url_for('register'))
         else:
             if password_register == re_password_register:
                 registerTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -95,7 +99,8 @@ def register():
                 user_register.disconnect_database()
                 return redirect(url_for('login'))
             else:
-                return jsonify({'status': '-1', 'errmsg': 'password is not same!'})
+                flash("密码不一致，请重新输入", 'err')
+                return redirect(url_for('register'))
 
     return render_template('register.html')
 

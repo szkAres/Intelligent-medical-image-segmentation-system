@@ -12,17 +12,23 @@
 <div class="htmleaf-container">
      <div class="wrapper">
         <div class="container">
-            <h1>Welcome</h1>
+            <h1>欢迎使用</h1>
             <!--<form class="form" method="post" action="/" onsubmit="return doLogin();">-->
             <form class="form" method="post" action="login">
-                <input type="text" placeholder="Username" name="username" id="username">
-                <input type="password" placeholder="Password" name="password" id="password">
-                <button type="submit" id="login-button">Login</button>
+                <input type="text" placeholder="用户名" name="username" id="username">
+                <input type="password" placeholder="密码" name="password" id="password">
+                <button type="submit" id="login-button">登录</button>
                 <br>
                 <br>
                 <p><a href="/register" style="color:white;text-decoration:none;">注册新账号</a></p>
             </form>
+
+            {# 使用flash确认消息,让用户知道状态发生了变化#}
+            {% for v in get_flashed_messages(category_filter=['err']) %}
+                <p style="color:red;">{{ v }}</p>
+            {% endfor %}
         </div>
+
         <ul class="bg-bubbles">
             <li></li>
             <li></li>
@@ -37,6 +43,8 @@
         </ul>
 
     </div>
+
+
 </div>
 
 <script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }} " type="text/javascript"></script>
