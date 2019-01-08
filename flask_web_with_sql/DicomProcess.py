@@ -5,7 +5,7 @@ import cv2
 
 DefaultCenter = 0 #For IM0.dcm, DefaultCenter = 352.5
 DefaultWidth = 0  #For IM0.dcm, DefaultWidth = 705.0
-pathTest = 'D:/Intelligent-medical-image-segmentation-system/flask_web_with_sql/static/manual_photos/IM0.dcm'
+#pathTest = 'E:/Document/Intelligent-medical-image-segmentation-system/flask_web_with_sql/static/manual_photos/IM104.dcm'
 
 class MyDicomPreProcess():
     def __init__(self):
@@ -43,12 +43,12 @@ class MyDicomPreProcess():
     def SavePic(self):
         cv2.imwrite(self.basepath+'//static/manual_photos/manual_picture_window_changed.jpg', self.ChangedPic)
 
-if __name__ =='__main__':
-    myPreProcess = MyDicomPreProcess()
-    myPreProcess.ImportPic(pathTest)
-    #myPreProcess.ChangeWindowCenterAndWidth()    #使用覆盖所有像素范围的default窗宽窗位
-    myPreProcess.ChangeWindowCenterAndWidth(Center=500,Width=500) #指定窗宽窗位
-    #myPreProcess.ChangeWindowCenterAndWidth(Center=352.5,Width=705) #指定窗宽窗位
-    #myPreProcess.ChangeWindowCenterAndWidth(Center=200,Width=900) #指定窗宽窗位
-    myPreProcess.SavePic()
+# if __name__ =='__main__':
+#     myPreProcess = MyDicomPreProcess()
+#     myPreProcess.ImportPic(pathTest)
+#     #myPreProcess.ChangeWindowCenterAndWidth()    #使用覆盖所有像素范围的default窗宽窗位
+#     myPreProcess.ChangeWindowCenterAndWidth(Center=500,Width=500) #指定窗宽窗位
+#     #myPreProcess.ChangeWindowCenterAndWidth(Center=352.5,Width=705) #指定窗宽窗位
+#     #myPreProcess.ChangeWindowCenterAndWidth(Center=200,Width=900) #指定窗宽窗位
+#     myPreProcess.SavePic()
 

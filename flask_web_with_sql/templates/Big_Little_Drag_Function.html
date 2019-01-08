@@ -11,15 +11,19 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
 
 <div class="page-header">
-    <h1 style="text-align:center">窗宽窗位调整</h1>
+    <h1 style="text-align:center">手动分割处理</h1>
 </div>
 <body background="/static/background/background.jpg">
 
 <!--div class="main" id="div" onmousewheel="return bbimg(this)"-->
     <!--此处设置传入的图片名称或者URL,待与前端其他页面继续整合-->
+
 <div class="main" id="div">
-    <img id="img" border="0" src="static/manual_photos/manual_picture_window_changed.jpg" />
+<h3 >窗宽窗位调整后图片显示</h3>
+
+<img id="img"  src="static/manual_photos/manual_picture_window_changed.jpg" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
 </div>
+
 <script language="javascript">
     var params = {
         zoomVal:1,
@@ -105,13 +109,13 @@
     //禁用右键菜单
     //document.oncontextmenu = function(){event.returnValue = false;}
 </script>
-    <div class="main">
-        <form role="form" method="post" action="windowChoose">
-            <input type="text" placeholder="window center" name="center" id="center">
-            <input type="text" placeholder="window width" name="width" id="width">
-            <input class='button green' type="submit" value="修改窗宽窗位" />
-        </form>
-    </div>
+    <!--<div class="main">-->
+        <!--<form role="form" method="post" action="windowChoose">-->
+            <!--<input type="text" placeholder="window center" name="center" id="center">-->
+            <!--<input type="text" placeholder="window width" name="width" id="width">-->
+            <!--<input class='button green' type="submit" value="修改窗宽窗位" />-->
+        <!--</form>-->
+    <!--</div>-->
     <div class="main">
         <form role="form" method="post" action="draw">
             <input class='button green' type="submit" value="下一步：勾画" />

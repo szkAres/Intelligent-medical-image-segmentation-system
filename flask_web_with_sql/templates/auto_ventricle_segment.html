@@ -8,15 +8,14 @@
     margin: 0px auto;
     }
     </style>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
-
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
 <div class="page-header">
-    <h1 style="text-align:center">腹部脂肪自动分割后的结果显示</h1>
+    <h1 style="text-align:center">右心室自动分割后的结果显示</h1>
 </div>
 <body background="/static/background/background.jpg">
 
 <div class="main">
-   <img src="{{url_for('static', filename='./after_auto_belly_photo/after_auto_belly_temp.jpg')}}" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
+   <img src="{{url_for('static', filename='./after_auto_ventricle_photo/after_auto_ventricle_temp.jpg')}}" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
 </div>
 
 <div class="main">
@@ -31,6 +30,5 @@
         </div>
     </form>
 </div>
-
 
 {% endblock %}
