@@ -22,7 +22,7 @@ class MyPredict():
 
     def LoadPic(self):
         self.img = cv2.imread(self.basepath + "/static/auto_photos/auto_picture.jpg", cv2.IMREAD_GRAYSCALE)
-
+        self.img = cv2.resize(self.img, (512,512), interpolation=cv2.INTER_NEAREST)
        # self.img = cv2.imread(self.basepath + "/static/photos/test.jpg", cv2.IMREAD_GRAYSCALE)
 
     def PredictPic(self):
