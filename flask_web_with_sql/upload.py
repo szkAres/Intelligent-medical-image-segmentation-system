@@ -1,5 +1,4 @@
-﻿# https://blog.csdn.net/dcrmg/article/details/81987808?utm_source=blogxgwz0
-# get post用阿嘎https://blog.csdn.net/qq_39974381/article/details/80927642
+﻿
 from flask import Flask, render_template, request, redirect, url_for, make_response, jsonify,send_from_directory,flash
 from werkzeug.utils import secure_filename
 import os
@@ -10,13 +9,14 @@ from medical_image import medical_image
 from class_user import class_user
 import Class_Predict
 import Class_Predict_RightVentricular
+import Class_Predict_Brain
 import pydicom
 import numpy as np
 from DicomProcess import *
 
 host = "localhost"
 username = "root"
-password = "ly"         #此处需设置成自己的密码
+password = "yangfei"         #此处需设置成自己的密码
 database_name = "flask_sql"
 table_name = "ImagesDatabase"
 user_table_name = "UsersDatabase"
@@ -31,6 +31,7 @@ app.config['SECRET_KEY'] = os.urandom(24)
 
 mPredict = Class_Predict.MyPredict()
 ventricular_Predict = Class_Predict_RightVentricular.MyPredictRightVentricular()
+Brain_predict = Class_Predict_Brain.MyPredictBrain()
 # 设置允许的文件格式
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg','dcm'])
 def allowed_file(filename):
@@ -97,7 +98,7 @@ def register():
                 user_register.connect_to_database(host,username,password,database_name)
                 user_register.user_create(user_table_name,password_register,registerTime,False)
                 user_register.disconnect_database()
-		flash("用户注册成功，请登录", 'err')
+                flash("用户注册成功，请登录", 'err')
                 return redirect(url_for('login'))
             else:
                 flash("密码不一致，请重新输入", 'err')
@@ -260,6 +261,8 @@ def segmentation_type():
          return redirect(url_for('auto_belly_segment'))  # url_for后面加的是函数名
     if segment == 'Ventricle':
         return redirect(url_for('auto_ventricle_segment'))  # url_for后面加的是函数名
+    if segment == "Brain":
+        return redirect(url_for('auto_brain_segment'))
 
 @app.route('/auto_belly_segment')
 def auto_belly_segment():
@@ -278,6 +281,15 @@ def auto_ventricle_segment():
     ventricular_Predict.PredictPic()
     ventricular_Predict.SavePic()
     return render_template('auto_ventricle_segment.html')
+
+# 颅脑自动分割
+@app.route('/auto_brain_segment')
+def auto_brain_segment():
+
+    Brain_predict.LoadPic()
+    Brain_predict.PredictPic()
+    Brain_predict.SavePic()
+    return render_template('auto_brain_segment.html')
 
 # 手动分割处理
 @app.route('/manual_segment', methods=['POST', 'GET'])   # 添加路由
