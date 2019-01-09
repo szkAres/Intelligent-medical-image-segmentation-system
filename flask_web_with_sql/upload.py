@@ -1,4 +1,4 @@
-# https://blog.csdn.net/dcrmg/article/details/81987808?utm_source=blogxgwz0
+﻿# https://blog.csdn.net/dcrmg/article/details/81987808?utm_source=blogxgwz0
 # get post用阿嘎https://blog.csdn.net/qq_39974381/article/details/80927642
 from flask import Flask, render_template, request, redirect, url_for, make_response, jsonify,send_from_directory,flash
 from werkzeug.utils import secure_filename
@@ -97,6 +97,7 @@ def register():
                 user_register.connect_to_database(host,username,password,database_name)
                 user_register.user_create(user_table_name,password_register,registerTime,False)
                 user_register.disconnect_database()
+		flash("用户注册成功，请登录", 'err')
                 return redirect(url_for('login'))
             else:
                 flash("密码不一致，请重新输入", 'err')
