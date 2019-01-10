@@ -16,7 +16,7 @@ from DicomProcess import *
 
 host = "localhost"
 username = "root"
-password = "yangfei"         #此处需设置成自己的密码
+password = "ly"         #此处需设置成自己的密码
 database_name = "flask_sql"
 table_name = "ImagesDatabase"
 user_table_name = "UsersDatabase"
