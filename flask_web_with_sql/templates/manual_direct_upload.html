@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/button_style.css') }}"/>
 <body background="/static/background/background.jpg">
 <div class="main">
-<h3 >已经上传的图片显示</h3>
+<h3 >图片显示</h3>
 
 <img src="{{url_for('static', filename='./manual_predivided_photos/manual_predivided.jpg')}}" class="img-thumbnail"  width="400" height="400" alt="你的图片被外星人劫持~~"  />
 
@@ -22,6 +22,27 @@
 </div>
 
 <div class="main">
+    <h3 style="text-align:center">选择图片类型</h3>
+   <form role="form" method="post" action="upload_type">
+        <div >
+             <label class="radio-inline">
+                <input type="radio" name="upload_type" value="Belly" checked="checked">腹部脂肪图片
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="upload_type" value="Brain">颅脑图片
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="upload_type" value="Ventricle">右心室图片
+            </label>
+        </div>
+        <br>
+        <div class="form-group">
+              <input class='button green' type="submit" onclick="alert('成功')" value="确定"  />
+        </div>
+    </form>
+</div>
+
+<!--div class="main">
     <form role="form" method="post" action="manual_direct">
         <div class="form-group">
             <input class='button green' type="submit" value="继续上传下一张图片"/>
@@ -32,6 +53,6 @@
             <input class='button green' type="submit" value="回到首页"/>
         </div>
     </form>
-</div>
+</div-->
 </body>
 {% endblock %}

@@ -16,7 +16,7 @@ from DicomProcess import *
 
 host = "localhost"
 username = "root"
-password = "ly"         #此处需设置成自己的密码
+password = "temppwd"
 database_name = "flask_sql"
 table_name = "ImagesDatabase"
 user_table_name = "UsersDatabase"
@@ -141,15 +141,22 @@ def windowChoose():
     global logined
     if logined == False:
         return redirect(url_for('login'))
+            
     if request.method == 'POST':
-        centerSet = request.form['center']
-        widthSet = request.form['width']
-        centerSetF = float(centerSet)
-        widthSetF = float(widthSet)
-        myPreProcess = MyDicomPreProcess()
-        myPreProcess.ImportPic(manual_picture_path_global)
-        myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
-        myPreProcess.SavePic()
+        post_value_exists = False
+        for check_post_value in request.form['center']:
+            post_value_exists = True
+        if  post_value_exists == True:
+            centerSet = request.form['center']
+            widthSet = request.form['width']
+            centerSetF = float(centerSet)
+            widthSetF = float(widthSet)
+            myPreProcess = MyDicomPreProcess()
+            myPreProcess.ImportPic(manual_picture_path_global)
+            myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
+            myPreProcess.SavePic()
+        else:
+            return redirect(url_for('draw'))  # url_for后面加的是函数名
     
     return render_template('Big_Little_Drag_Function.html')
 
@@ -199,6 +206,8 @@ def manual_direct():
 
         if post_file_exists == True:
             f = request.files['file']
+            global global_upload_file
+            global_upload_file = f
             path = basepath + "/static/manual_predivided_photos/"
             file_path = path + f.filename  # 图片路径和名称
             print(file_path)
@@ -214,6 +223,8 @@ def manual_direct():
             # 根据图片名字进行存储，但显示有问题
             # cv2.imwrite(os.path.join(file_path), img)   # 保存图片，第一个参数是路径加图像名，第二个是图像矩阵
             # 将图片名字都更改为test.jpg
+            global global_upload_image
+            global_upload_image = img
             cv2.imwrite(os.path.join(path, 'manual_predivided.jpg'), img)
             return render_template('manual_direct_upload.html')
     return render_template('manual_direct.html')
@@ -221,31 +232,30 @@ def manual_direct():
 #### 做过修改 将其隐藏起来了
 
 # # 选择分割类型(腹部 or  颅脑  or  左心室)
-# @app.route('/upload_type', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
-# def upload_type():
-#     global logined
-#     if logined == False:
-#         return redirect(url_for('login'))
-#     upload_type = request.values.get('upload_type')
-#     nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#     filenameTime=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-#     global global_upload_file
-#     global global_upload_image
-#     upload_file_path = basepath + "/static/manual_photos/" + upload_type + "/" + filenameTime
-#     final_upload_file_path = upload_file_path + global_upload_file.filename
-#     #global_upload_file.save(upload_file_path)  # 保存图片
-#
-#     cv2.imwrite(final_upload_file_path, global_upload_image)
-#
-#     print('uploading')
-#     image_write = medical_image(user_temp,nowTime,upload_type,final_upload_file_path)
-#     image_write.connect_to_database(host,username,password,database_name)
-#     image_write.insert(table_name)
-#     image_write.commit_database()
-#     image_write.disconnect_database()
-#     print('uploaded')
-#     return redirect(url_for('uploadChoose'))  # url_for后面加的是函数名
-#
+@app.route('/upload_type', methods=['get','post'])  # form表单中的action对应的是 网址！！不是函数名
+def upload_type():
+    global logined
+    if logined == False:
+        return redirect(url_for('login'))
+    upload_type = request.values.get('upload_type')
+    nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    filenameTime=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    global global_upload_file
+    global global_upload_image
+    upload_file_path = basepath + "/static/manual_photos/" + upload_type + "/" + filenameTime
+    final_upload_file_path = upload_file_path + global_upload_file.filename
+
+    cv2.imwrite(final_upload_file_path, global_upload_image)
+
+    print('uploading')
+    image_write = medical_image(user_temp,nowTime,upload_type,final_upload_file_path)
+    image_write.connect_to_database(host,username,password,database_name)
+    image_write.insert(table_name)
+    image_write.commit_database()
+    image_write.disconnect_database()
+    print('uploaded')
+    return redirect(url_for('uploadChoose'))  # url_for后面加的是函数名
+
 # 选择分割类型(腹部 or  颅脑  or  左心室)
 
 

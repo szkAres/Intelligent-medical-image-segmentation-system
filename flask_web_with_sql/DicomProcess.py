@@ -12,8 +12,11 @@ class MyDicomPreProcess():
         self.basepath = os.path.dirname(__file__)
 
     def ImportPic(self,pathSet):
-        self.OriginalPic = pydicom.read_file(pathSet)
-        self.Pixel = self.OriginalPic.pixel_array
+        if(pathSet[-3:]=='dcm'):
+            self.OriginalPic = pydicom.read_file(pathSet)
+            self.Pixel = self.OriginalPic.pixel_array
+        else:
+            self.Pixel= cv2.imread(pathSet, cv2.IMREAD_GRAYSCALE)
         self.Pixel = np.float32(self.Pixel)
 
         global DefaultCenter,DefaultWidth
