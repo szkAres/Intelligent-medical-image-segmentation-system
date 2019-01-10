@@ -102,7 +102,7 @@ class MyPredictRightVentricular():
 
     def LoadPic(self):
         self.img = cv2.imread(self.basepath + "/static/auto_photos/auto_picture.jpg", cv2.IMREAD_GRAYSCALE)
-        self.img = cv2.resize(self.img, (256,216), interpolation=cv2.INTER_NEAREST)
+        self.img = cv2.resize(self.img, (216,256), interpolation=cv2.INTER_NEAREST)
         pix = np.float32(self.img)
         max = np.max(pix)
         pix = np.divide(pix, max)
