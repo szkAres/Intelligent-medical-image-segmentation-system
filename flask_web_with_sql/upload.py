@@ -146,17 +146,20 @@ def windowChoose():
         post_value_exists = False
         for check_post_value in request.form['center']:
             post_value_exists = True
+            
         if  post_value_exists == True:
             centerSet = request.form['center']
             widthSet = request.form['width']
             centerSetF = float(centerSet)
             widthSetF = float(widthSet)
-            myPreProcess = MyDicomPreProcess()
-            myPreProcess.ImportPic(manual_picture_path_global)
-            myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
-            myPreProcess.SavePic()
         else:
-            return redirect(url_for('draw'))  # url_for后面加的是函数名
+            centerSetF = -1
+            widthSetF = -1
+
+        myPreProcess = MyDicomPreProcess()
+        myPreProcess.ImportPic(manual_picture_path_global)
+        myPreProcess.ChangeWindowCenterAndWidth(Center=centerSetF,Width=widthSetF)
+        myPreProcess.SavePic()
     
     return render_template('Big_Little_Drag_Function.html')
 
